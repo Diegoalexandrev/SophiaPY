@@ -1,0 +1,21 @@
+# Arquivos de ambiente
+.env
+*.env
+
+# Virtualenv
+venv/
+.venv/
+
+# Arquivos do sistema
+.DS_Store  (Mac)
+Thumbs.db  (Windows)
+
+# IDE/Editores
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+
+# Logs e arquivos gerados
+*.log
+*.sqlite
