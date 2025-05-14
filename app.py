@@ -5,13 +5,15 @@ from app import db
 app = create_app()
 #app.register_blueprint(bp) 
 
+
 with app.app_context():
     print("↓ Verificando tabelas existentes...")
     inspector = db.inspect(db.engine)
     print("Tabelas antes:", inspector.get_table_names())
     
-    db.create_all()  # Cria as tabelas
-    
+    db.drop_all()
+    db.create_all()     
+
     print("Tabelas depois:", inspector.get_table_names())
     if 'usuario' in inspector.get_table_names():
         print("Tabela 'usuario' criada com sucesso!")
