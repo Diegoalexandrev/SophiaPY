@@ -1,6 +1,6 @@
-from app import create_app, db
-from app.blueprints.auth.routes import auth_bp  # importa o blueprint
-from app.models import *
+from main import create_app, db
+from main.blueprints.auth.routes import auth_bp  # importa o blueprint
+from main.models import *
 from datetime import date, timedelta
 
 app = create_app()

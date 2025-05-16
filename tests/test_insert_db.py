@@ -1,5 +1,5 @@
-from app import create_app, db  
-from app.models import *
+from main import create_app, db  
+from main.models import *
 from datetime import date, timedelta
 
 # Cria a aplicação a partir da função create_app

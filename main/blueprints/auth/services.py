@@ -1,4 +1,4 @@
-from app.models import Usuario
+from main.models import Usuario
 
 def verificar_login(email, senha):
     # Tenta buscar o usuário pelo email
