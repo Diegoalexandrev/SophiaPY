@@ -1,7 +1,8 @@
+from flask import Blueprint, request, jsonify
 from .schemas import LoginSchema
 from .services import verificar_login
 
-auth_bp = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_bp.route('/login', methods=['POST'])
 def login():

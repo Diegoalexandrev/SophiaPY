@@ -29,6 +29,7 @@ class Usuario(db.Model):
     emprestimos = db.relationship('Emprestimos', back_populates='usuario')
     reservas = db.relationship('Reservas', back_populates='usuario')
 
+
 class Livros(db.Model):
     __tablename__ = 'livros'  
     id = db.Column(db.Integer, primary_key=True)

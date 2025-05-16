@@ -8,12 +8,12 @@ app = create_app()
 # Usa o contexto da aplicação para acessar o banco
 with app.app_context():
     # Cria as tabelas (se ainda não existirem)
-    db.drop_all()
+    #db.drop_all()
     db.create_all()
 
     # --- Criar Usuarios ---
     usuario1 = Usuario(
-        nome="Diego Silva",
+        nome="Joao Silva",
         senha="123456",
         cpf="123.456.789-00",
         email="joao@email.com",
