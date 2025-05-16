@@ -1,6 +1,8 @@
 # Arquivos de ambiente
 .env
 *.env
+.env.local
+.env.render
 
 # Virtualenv
 venv/
