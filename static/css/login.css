@@ -1,0 +1,94 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #cc0000; /* Fundo vermelho */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  color: white;
+}
+
+.login-container {
+  background: white; /* Container branco */
+  padding: 40px 45px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  width: 340px;
+  text-align: center;
+  color: #222; /* Texto escuro dentro do container */
+}
+
+h2 {
+  margin-bottom: 25px;
+  color: #cc0000; /* Título vermelho */
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+label {
+  display: block;
+  margin-top: 20px;
+  text-align: left;
+  color: #555;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 8px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #cc0000;
+  outline: none;
+  box-shadow: 0 0 6px rgba(204, 0, 0, 0.4);
+}
+
+button {
+  margin-top: 25px;
+  width: 100%;
+  background-color: #cc0000;
+  border: none;
+  color: white;
+  padding: 14px;
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #990000;
+}
+
+.links {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.links a {
+  color: #cc0000;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.links a:hover {
+  text-decoration: underline;
+  color: #990000;
+}

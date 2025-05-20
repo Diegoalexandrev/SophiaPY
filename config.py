@@ -7,12 +7,12 @@ else:
     print("Rodando no RENDER (produção)")
 
 # Carrega variáveis do .env.local apenas em desenvolvimento
-if not os.getenv('RENDER'):  # Se NÃO estiver no Render
+if not os.getenv('RENDER'):  
     load_dotenv('.env.local')
 
 # Configuração do banco de dados
 if os.getenv('RENDER'):  # Se estiver no Render (produção)
-    DATABASE_URL = os.getenv('DATABASE_URL_INTERNO')  # Usa a URL do Render automaticamente
+    DATABASE_URL = os.getenv('DATABASE_URL_INTERNO')  
 else:  # Local (desenvolvimento)
     DATABASE_URL = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 

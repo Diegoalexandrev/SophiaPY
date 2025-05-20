@@ -1,12 +1,10 @@
 from main.models import Usuario
 
-def verificar_login(email, senha):
-    # Tenta buscar o usuário pelo email
-    usuario = Usuario.query.filter_by(email=email).first()
+def verificar_login(matricula, senha):
+   
+    usuario = Usuario.query.filter_by(matricula=matricula).first()
 
-    # Se o usuário não for encontrado ou a senha não for válida
     if not usuario or not usuario.verificar_senha(senha):
-        raise ValueError("Credenciais inválidas")
+        raise ValueError("Usuario ou Senha Invalidos")
 
-    # Retorna o usuário se tudo estiver certo
     return usuario

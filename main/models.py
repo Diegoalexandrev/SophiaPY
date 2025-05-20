@@ -1,7 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
 from .database import db
 from enum import Enum
-from datetime import date
+from datetime import date, datetime, timedelta, timezone  
+from flask import current_app
+import jwt
+import bcrypt
 
 class CargoEnum(Enum):
     BIBLIOTECARIO = 'Bibliotecario'
@@ -11,7 +14,6 @@ class Usuario(db.Model):
     __tablename__ = 'usuarios'  
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
-    senha = db.Column(db.String(120), nullable=False)
     cpf = db.Column(db.String(14), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     telefone = db.Column(db.String(15), nullable=False)
@@ -26,8 +28,25 @@ class Usuario(db.Model):
         nullable=False
     )
 
+    senha = db.Column(db.String(120), nullable=False)
     emprestimos = db.relationship('Emprestimos', back_populates='usuario')
     reservas = db.relationship('Reservas', back_populates='usuario')
+
+    def set_senha(self, senha_plana):
+        self.senha = bcrypt.hashpw(senha_plana.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    def verificar_senha(self, senha_plana):
+        return bcrypt.checkpw(senha_plana.encode('utf-8'), self.senha.encode('utf-8'))
+    
+    def gerar_token(self):
+        print("SECRET_KEY:", current_app.config['SECRET_KEY'], type(current_app.config['SECRET_KEY']))
+
+        payload = {
+            "usuario_id": self.id,
+            "exp": datetime.now(timezone.utc) + timedelta(hours=1)
+        }
+        token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+        return token
 
 
 class Livros(db.Model):

@@ -7,10 +7,9 @@ body {
   flex-direction: column;
 }
 
-/* Conteúdo principal ocupa o espaço restante */
 main {
   flex: 1;
-  padding: 20px; /* Movido o padding pra cá */
+  padding: 20px;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
 }
@@ -79,6 +78,7 @@ footer {
   padding: 10px;
   font-size: 14px;
   border-top: 1px solid #ddd;
+  font-weight: bold;
 }
 
 footer p {
@@ -88,5 +88,4 @@ footer p {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  font-weight: bold;
 }

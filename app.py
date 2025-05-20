@@ -1,14 +1,22 @@
 from main import create_app, db
-from main.blueprints.auth.routes import auth_bp  # importa o blueprint
 from main.models import *
 from datetime import date, timedelta
+from flask import Flask, render_template
+import os 
+from flask import request
+from main.blueprints.home.utils import verificar_token
+from main.blueprints.home.routes.home_api import home_bp
+from flask import redirect, url_for
+from main.blueprints.auth import auth_bp
 
 app = create_app()
 
 # Registra o blueprint
-app.register_blueprint(auth_bp, url_prefix='/auth')  # /auth/login será a rota
+app.register_blueprint(auth_bp)  
+app.register_blueprint(home_bp)
 
-# Criar e verificar tabelas
+
+# Cria e verifica tabelas
 with app.app_context():
     print("↓ Verificando tabelas existentes...")
     inspector = db.inspect(db.engine)
@@ -17,29 +25,22 @@ with app.app_context():
     db.drop_all()
     db.create_all()
 
-    print("Tabelas depois:", inspector.get_table_names())
-    if 'usuario' in inspector.get_table_names():
-        print("Tabela 'usuario' criada com sucesso!")
-    else:
-        print("Falha ao criar tabela")
-
     if not Usuario.query.first():
         print("Populando dados iniciais...")
 
             # --- Criar Usuarios ---
         usuario1 = Usuario(
             nome="Joao Silva",
-            senha="123456",
             cpf="123.456.789-00",
             email="joao@email.com",
             telefone="(11) 99999-9999",
             data_nascimento=date(1990, 5, 15),
             cargo=CargoEnum.BIBLIOTECARIO,
-            matricula=20250001
+            matricula=20250001,
         )
+        usuario1.set_senha("123456")
         usuario2 = Usuario(
             nome="Maria Souza",
-            senha="654321",
             cpf="987.654.321-00",
             email="maria@email.com",
             telefone="(11) 98888-8888",
@@ -47,6 +48,8 @@ with app.app_context():
             cargo=CargoEnum.ASSISTENTE,
             matricula=20250002
         )
+        usuario1.set_senha("123456")
+        usuario2.set_senha("123456")
         db.session.add(usuario1)
         db.session.add(usuario2)
         
@@ -132,11 +135,18 @@ with app.app_context():
         db.session.add(reserva1)
         db.session.commit()
     
-
 # Rota padrão
 @app.route('/')
 def index():
-    return 'Servidor Flask rodando!'
+    return render_template('login.html')
+
+@app.route("/index")
+def home():
+    token = request.cookies.get('token') 
+    if not token or not verificar_token(token):
+        return redirect(url_for("auth.login"))  
+
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

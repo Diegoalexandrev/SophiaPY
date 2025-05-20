@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="form-login">
+      <label for="matricula">Matrícula:</label>
+      <input type="text" name="matricula" required>
+
+      <label for="senha">Senha:</label>
+      <input type="password" name="senha" required>
+
+      <button type="submit">Entrar</button>
+    </form>
+
+    <p id="mensagem-erro" style="color: red; display: none;"></p>
+
+    <div class="links">
+      <a href="#">Esqueci a senha</a>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

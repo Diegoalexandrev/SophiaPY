@@ -1,17 +1,29 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
+  align-items: center;
+}
+
+main {
+  flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Estilização do cabeçalho */
 header {
   background: linear-gradient(96deg, #cc0000 0%, #f00b54 100%);
-  height: 100px; /* Altura maior para destacar */
+  height: 100px;
   width: 100%;
   text-align: center;
   color: white;
@@ -21,17 +33,15 @@ header {
   font-size: 24px;
 }
 
-/* Menu de opções */
 .menu {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 colunas iguais */
-  gap: 45px; /* Espaçamento entre os itens */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 45px;
   justify-content: center;
-  margin-top: 60px; /* Distância do topo */
+  margin-top: 60px;
   width: fit-content;
 }
 
-/* Cada item do menu */
 .menu-item {
   background-color: #ffffff;
   padding: 15px;
@@ -46,34 +56,43 @@ header {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Efeito ao passar o mouse */
 .menu-item:hover {
   transform: scale(1.1);
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
 }
 
-/* Estilização dos ícones */
 .menu-item img {
-  width: 50px; /* Ajuste do tamanho do ícone */
+  width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-/* Estilização do texto abaixo dos ícones */
 .menu-item p {
   font-size: 14px;
   font-weight: bold;
   margin-top: 8px;
-  color: #333; /* Cor para melhor contraste */
+  color: #333;
   text-align: center;
 }
 
+/* Rodapé */
 footer {
-  color: black; /* Texto branco */
-  text-align: center; /* Centraliza o texto */
-  padding: 3px; /* Espaçamento interno */
-  position: fixed; /* Fixa no final da tela */
-  bottom: 0; /* Fica no rodapé */
-  width: 100%; /* Ocupa toda a largura */
+  background-color: #f1f1f1;
+  color: #555;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  border-top: 1px solid #ddd;
+  width: 100%;
+  font-weight: bold;
+}
+
+footer p {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }

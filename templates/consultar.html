@@ -3,20 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consultar Livro</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <!-- Link para o CSS -->
+    <title>Consulta de Livros</title>
+    <link rel="stylesheet" href="../css/consultar.css" />
   </head>
   <body>
     <header>
-      <h1>Consultar Livros</h1>
+      <h1>Consulta de Livros</h1>
     </header>
 
     <main>
-      <p>Página de Consulta em Manutenção!</p>
+      <input
+        type="text"
+        id="busca"
+        placeholder="Digite o Título, Autor, Categoria ou Número Acervo..."
+      />
+
+      <div id="lista-livros" class="cards-container"></div>
+
+      <a href="../index.html">Voltar para a página inicial</a>
     </main>
 
-    <a href="../index.html">Voltar para a página inicial</a>
-    <!-- Link de retorno -->
+    <footer>
+      <p>Projeto Integrador IESB 2025.</p>
+    </footer>
+
+    <script src="../js/consultar.js"></script>
   </body>
 </html>

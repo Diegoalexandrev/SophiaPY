@@ -7,10 +7,9 @@ body {
   flex-direction: column;
 }
 
-/* Conteúdo principal ocupa o espaço restante */
 main {
   flex: 1;
-  padding: 20px; /* Movido o padding pra cá */
+  padding: 20px;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
 }

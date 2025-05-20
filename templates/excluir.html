@@ -4,19 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Excluir Livro</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <!-- Link para o CSS -->
+    <link rel="stylesheet" href="../css/excluir.css" />
   </head>
   <body>
     <header>
-      <h1>Excluir Livros</h1>
+      <h1>Excluir Livro</h1>
     </header>
 
     <main>
-      <p>Página de Exclusão em Manutenção!</p>
+      <p>Digite o título do livro que deseja excluir:</p>
+
+      <form id="form-excluir">
+        <label for="titulo">Título do Livro</label>
+        <input
+          type="text"
+          id="titulo"
+          placeholder="Ex: Estruturas de Dados Usando C"
+          required
+        />
+
+        <button type="submit">Excluir</button>
+      </form>
+
+      <a href="../index.html">Voltar para a página inicial</a>
     </main>
 
-    <a href="../index.html">Voltar para a página inicial</a>
-    <!-- Link de retorno -->
+    <footer>
+      <p>Projeto Integrador IESB 2025.</p>
+    </footer>
+
+    <script src="../js/excluir.js"></script>
   </body>
 </html>

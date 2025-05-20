@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editar Livro</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <!-- Link para o CSS -->
+    <link rel="stylesheet" href="../css/editar.css" />
   </head>
   <body>
     <header>
@@ -13,10 +12,26 @@
     </header>
 
     <main>
-      <p>Página de Edição em Manutenção!</p>
+      <p>Digite o título, autor ou categoria do livro que deseja editar:</p>
+
+      <form id="form-editar">
+        <label for="titulo">Título, Autor ou Categoria</label>
+        <input
+          type="text"
+          id="busca"
+          placeholder="Estruturas de Dados Usando C, Tenenbaum, Programação"
+          required
+        />
+        <button type="submit">Buscar</button>
+      </form>
+
+      <a href="../index.html">Voltar para a página inicial</a>
     </main>
 
-    <a href="../index.html">Voltar para a página inicial</a>
-    <!-- Link de retorno -->
+    <footer>
+      <p>Projeto Integrador IESB 2025.</p>
+    </footer>
+
+    <script src="../js/editar.js"></script>
   </body>
 </html>
