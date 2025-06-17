@@ -48,10 +48,21 @@ with app.app_context():
             cargo=CargoEnum.ASSISTENTE,
             matricula=20250002
         )
+        usuario3 = Usuario(
+            nome="Carlos Pereira",
+            cpf="111.222.333-44",
+            email="carlos@email.com",
+            telefone="(11) 97777-7777",
+            data_nascimento=date(2000, 3, 10),
+            cargo=CargoEnum.ALUNO,
+            matricula=20250003
+        )
+        usuario3.set_senha("123456")       
         usuario1.set_senha("123456")
         usuario2.set_senha("123456")
         db.session.add(usuario1)
-        db.session.add(usuario2)
+        db.session.add(usuario2)      
+        db.session.add(usuario3)
         
         db.session.commit()
 
@@ -107,16 +118,17 @@ with app.app_context():
         db.session.commit()
 
         # --- Criar Empréstimos ---
+        # --- Criar Empréstimos ---
         emprestimo1 = Emprestimos(
             usuario=usuario1,
-            livro=livro1,
+            exemplar=exemplar1,
             data_emprestimo=date.today() - timedelta(days=10),
             data_devolucao=date.today() + timedelta(days=7),
             devolvido=False
         )
         emprestimo2 = Emprestimos(
             usuario=usuario2,
-            livro=livro2,
+            exemplar=exemplar2,
             data_emprestimo=date.today() - timedelta(days=5),
             data_devolucao=date.today() + timedelta(days=14),
             devolvido=False
@@ -147,6 +159,8 @@ def home():
         return redirect(url_for("auth.login"))  
 
     return render_template("index.html")
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

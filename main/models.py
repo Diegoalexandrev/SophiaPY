@@ -9,6 +9,7 @@ import bcrypt
 class CargoEnum(Enum):
     BIBLIOTECARIO = 'Bibliotecario'
     ASSISTENTE = 'Assistente'
+    ALUNO = 'Aluno'
 
 class Usuario(db.Model):
     __tablename__ = 'usuarios'  
@@ -61,7 +62,7 @@ class Livros(db.Model):
 
     autores = db.relationship("Autores", secondary="livros_autores", back_populates="livros")
     exemplares = db.relationship('Exemplares', back_populates='livro')
-    emprestimos = db.relationship('Emprestimos', back_populates='livro')
+
 
 class Autores(db.Model):
     __tablename__ = 'autores'
@@ -80,13 +81,14 @@ class Emprestimos(db.Model):
     __tablename__ = 'emprestimos'
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
-    livro_id = db.Column(db.Integer, db.ForeignKey('livros.id'), nullable=False)
+    exemplar_id = db.Column(db.Integer, db.ForeignKey('exemplares.id'), nullable=False)
     data_emprestimo = db.Column(db.Date, nullable=False, default=date.today)
     data_devolucao = db.Column(db.Date)
     devolvido = db.Column(db.Boolean, default=False)
 
     usuario = db.relationship('Usuario', back_populates='emprestimos')
-    livro = db.relationship('Livros', back_populates='emprestimos')
+    exemplar = db.relationship('Exemplares', back_populates='emprestimos')  # aqui a correção
+
 
 class EstadoExemplar(Enum):
     DISPONIVEL = 'Disponível'
@@ -103,6 +105,21 @@ class Exemplares(db.Model):
 
     livro = db.relationship('Livros', back_populates='exemplares')
     reservas = db.relationship('Reservas', back_populates='exemplar')
+    emprestimos = db.relationship('Emprestimos', back_populates='exemplar')  # adicione esta linha
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "numero_chamada": self.numero_chamada,
+            "estado": self.estado.value,
+            "livro": {
+                "titulo": self.livro.titulo,
+                "autores": [autor.nome for autor in self.livro.autores],
+                "ano_publicacao": self.livro.ano_publicacao.strftime('%Y'),
+                "categoria": self.livro.categoria,
+            }
+        }
+
 
 class StatusReserva(Enum):
     ATIVA = 'Ativa'

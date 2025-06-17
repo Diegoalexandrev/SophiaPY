@@ -1,32 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consulta de Livros</title>
-    <link rel="stylesheet" href="../css/consultar.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Consulta de Livros</h1>
-    </header>
 
-    <main>
-      <input
-        type="text"
-        id="busca"
-        placeholder="Digite o Título, Autor, Categoria ou Número Acervo..."
-      />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Dados - Biblioteca SophiaPy</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/consultar.css') }}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
 
-      <div id="lista-livros" class="cards-container"></div>
+<body>
+  <header>
+    <div class="logo">SophiaPy</div>
 
-      <a href="../index.html">Voltar para a página inicial</a>
-    </main>
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar...">
+      <span class="material-icons">search</span>
+    </div>
 
-    <footer>
-      <p>Projeto Integrador IESB 2025.</p>
-    </footer>
+    <div class="user-profile">
+      <!-- <span class="material-icons">account_circle</span> -->
+      <a href="{{ url_for('auth.logout') }}" class="logout-btn">
+        <i class="material-icons">logout</i>
+      </a>
+    </div>
+  </header>
 
-    <script src="../js/consultar.js"></script>
-  </body>
+  <main>
+    <aside class="side-nav">
+      <h3>Filtros</h3>
+      <ul>
+        <li><a href="#" class="menu-link" data-tabela="exemplares">Exemplares</a></li>
+        <li><a href="#" class="menu-link" data-tabela="livros">Livros</a></li>
+        <li><a href="#" class="menu-link" data-tabela="usuarios">Usuários</a></li>
+        <li><a href="#" class="menu-link" data-tabela="emprestimos">Empréstimos</a></li>
+        <li><a href="#" class="menu-link" data-tabela="autores">Autores</a></li>
+        <li><a href="#" class="menu-link" data-tabela="reservas">Reservas</a></li>
+      </ul>
+    </aside>
+
+    <section class="content">
+      <div class="toolbar">
+
+        <!-- <select>
+          <option>Ordenar por...</option>
+          <option>Título</option>
+          <option>Autor</option>
+          <option>Data</option>
+        </select> -->
+
+      </div>
+
+      <!-- 👉 Aqui está a dica -->
+      <div id="dica-busca" class="dica-busca">
+        Selecione uma tabela para ver as opções de filtro.
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <h4>Selecione um filtro para começar</h4>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <p>Projeto Integrador IESB 2025.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/consultar.js') }}"></script>
+</body>
+
 </html>

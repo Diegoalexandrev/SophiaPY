@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editar Livro</title>
-    <link rel="stylesheet" href="../css/editar.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/editar.css') }}" />
   </head>
   <body>
     <header>
@@ -25,13 +25,13 @@
         <button type="submit">Buscar</button>
       </form>
 
-      <a href="../index.html">Voltar para a página inicial</a>
+      <a href="{{ url_for('home.index') }}">Voltar para a página inicial</a>
     </main>
 
     <footer>
       <p>Projeto Integrador IESB 2025.</p>
     </footer>
 
-    <script src="../js/editar.js"></script>
+    <script src="{{ url_for('static', filename='js/editar.js') }}"></script>
   </body>
 </html>

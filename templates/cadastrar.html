@@ -14,7 +14,7 @@
     <main>
       <p>Preencha os campos abaixo para cadastrar um novo livro:</p>
 
-      <form>
+      <form method="POST" action="{{ url_for('home.cadastrar') }}">
         <label for="titulo">Título do Livro</label>
         <input
           type="text"
@@ -48,13 +48,13 @@
         <button type="submit">Adicionar</button>
       </form>
 
-      <a href="../index.html">Voltar para a página inicial</a>
+      <a href="{{ url_for('home.index') }}">Voltar para a página inicial</a>
     </main>
 
     <footer>
       <p>Projeto Integrador IESB 2025.</p>
     </footer>
 
-    <script src="../js/cadastrar.js"></script>
+    <script src="{{ url_for('static', filename='js/cadastrar.js') }}"></script>
   </body>
 </html>

@@ -89,16 +89,17 @@ with app.app_context():
     db.session.commit()
 
     # --- Criar Empréstimos ---
+# --- Criar Empréstimos ---
     emprestimo1 = Emprestimos(
         usuario=usuario1,
-        livro=livro1,
+        exemplar=exemplar1,   # mudou para exemplar
         data_emprestimo=date.today() - timedelta(days=10),
         data_devolucao=date.today() + timedelta(days=7),
         devolvido=False
     )
     emprestimo2 = Emprestimos(
         usuario=usuario2,
-        livro=livro2,
+        exemplar=exemplar2,   # mudou para exemplar
         data_emprestimo=date.today() - timedelta(days=5),
         data_devolucao=date.today() + timedelta(days=14),
         devolvido=False
@@ -106,6 +107,7 @@ with app.app_context():
 
     db.session.add_all([emprestimo1, emprestimo2])
     db.session.commit()
+
 
     # --- Criar Reservas ---
     reserva1 = Reservas(
