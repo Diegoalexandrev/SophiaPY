@@ -4,11 +4,15 @@ from main.models import Livros, Emprestimos, Exemplares, Reservas, Autores, Usua
 from flask import jsonify
 from sqlalchemy import or_, cast, String, Integer, extract
 from sqlalchemy.orm import joinedload
+from main.database import db
+from datetime import datetime
+from main.models import Exemplares, EstadoExemplar
+
 
 
 home_bp = Blueprint('home', __name__)  
 
-# Mapeia nome tabela para modelo e campos a pesquisar
+
 TABELAS_MAPA = {
     "livros": (Livros, ["titulo", "autor"]),
     "exemplares": (Exemplares, ["id", "codigo"]),
@@ -27,7 +31,6 @@ def index():
 
 @home_bp.route('/consultar', methods=['GET'])
 def consultar():
-    # valida token, etc
     return render_template('consultar.html')
 
 @home_bp.route('/consultar/buscar', methods=['POST'])
@@ -35,7 +38,7 @@ def buscar_simples():
     try:
         data = request.get_json()
         texto = data.get("texto", "").strip()
-        tipo = data.get("tipo", "exemplares").lower()  # padrão buscar exemplares
+        tipo = data.get("tipo", "exemplares").lower()  
         print(f"🔍 Texto recebido: '{texto}', Tipo: '{tipo}'")
 
         resultados = []
@@ -195,15 +198,11 @@ def buscar_simples():
                         "titulo": reserva.exemplar.livro.titulo
                     },
 
-                    #"livro": reserva.exemplar.livro.titulo,
-
                     "usuario": {
                         "nome": reserva.usuario.nome,
                         "matricula": reserva.usuario.matricula
                     },
-
-                    #"usuario": f"{reserva.usuario.nome} ({reserva.usuario.matricula})",
-                    "status": reserva.status.name  # ou .value dependendo do Enum
+                    "status": reserva.status.name  
                 })
 
         else:
@@ -278,6 +277,7 @@ def consultar_emprestimos():
         })
     return jsonify(lista)
 
+
 @home_bp.route('/consultar/autores', methods=['GET'])
 def consultar_autores():
     autores = Autores.query.all()
@@ -286,7 +286,6 @@ def consultar_autores():
         lista_autores.append({
             'id': autor.id,
             'nome': autor.nome
-            # adicione outros campos se quiser
         })
     return jsonify(lista_autores)
 
@@ -299,7 +298,7 @@ def consultar_reservas():
         resultado.append({
             "id": reserva.id,
             "data_reserva": reserva.data_reserva.strftime("%d/%m/%Y"),
-            "status": reserva.status.name,  # Exemplo: 'ATIVA'
+            "status": reserva.status.name,  
             "usuario": {
                 "nome": reserva.usuario.nome,
                 "matricula": reserva.usuario.matricula,
@@ -318,42 +317,91 @@ def consultar_reservas():
     
     return {"reservas": resultado}
 
-@home_bp.route('/cadastrar', methods=['GET', 'POST'])
+@home_bp.route('/cadastrar', methods=['GET'])
 def cadastrar():
     token = request.cookies.get('token')
     if not token or not verificar_token(token):
         return redirect(url_for('auth.login'))
 
-    if request.method == 'POST':
-        # aqui processa o cadastro do livro
-        titulo = request.form['titulo']
-        autor_nome = request.form['autor']
-        ano = request.form['ano']
-        categoria = request.form['categoria']
+    autores = Autores.query.all()
+    livros = Livros.query.all()  
 
-        '''
-        # salvar no banco (exemplo simplificado)
-        # verifique se o autor já existe, se não, cria novo autor
-        autor = Autores.query.filter_by(nome=autor_nome).first()
-        if not autor:
-            autor = Autores(nome=autor_nome)
-            db.session.add(autor)
+    return render_template('cadastrar.html', autores=autores, livros=livros)
 
-        livro = Livros(
-            titulo=titulo,
-            ano_publicacao=ano,
-            categoria=categoria,
-            isbn="",  # pode adicionar no form depois
-            curso=""  # idem
-        )
-        livro.autores.append(autor)
-        db.session.add(livro)
+
+@home_bp.route('/cadastrar_livro', methods=['POST'])
+def cadastrar_livro():
+    token = request.cookies.get('token')
+    if not token or not verificar_token(token):
+        return redirect(url_for('auth.login'))
+
+    titulo = request.form.get('titulo')
+    ano_str = request.form.get('ano_publicacao')
+    categoria = request.form.get('categoria')
+    isbn = request.form.get('isbn')
+    curso = request.form.get('curso')
+    autores_ids = request.form.getlist('autores')
+
+    try:
+        ano_publicacao = datetime.strptime(ano_str, "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        ano_publicacao = None
+
+    livro = Livros(
+        titulo=titulo,
+        ano_publicacao=ano_publicacao,
+        categoria=categoria,
+        isbn=isbn,
+        curso=curso
+    )
+
+    for autor_id in autores_ids:
+        autor = Autores.query.get(autor_id)
+        if autor:
+            livro.autores.append(autor)
+
+    db.session.add(livro)
+    db.session.commit()
+
+    return redirect(url_for('home.index'))
+
+@home_bp.route('/cadastrar_autor', methods=['POST'])
+def cadastrar_autor():
+    token = request.cookies.get('token')
+    if not token or not verificar_token(token):
+        return redirect(url_for('auth.login'))
+
+    nome_autor = request.form.get('nome_autor')
+
+    if nome_autor:
+        novo_autor = Autores(nome=nome_autor)
+        db.session.add(novo_autor)
         db.session.commit()
 
-        return redirect(url_for('home.index'))
-        '''
+    return redirect(url_for('home.index'))
 
-    return render_template('cadastrar.html')
+@home_bp.route('/cadastrar_exemplar', methods=['POST'])
+def cadastrar_exemplar():
+    token = request.cookies.get('token')
+    if not token or not verificar_token(token):
+        return redirect(url_for('auth.login'))
+
+    livro_id = request.form.get('livro_exemplar')
+    numero_chamada = request.form.get('numero_chamada')
+    estado = request.form.get('estado')
+
+    if livro_id and numero_chamada and estado:
+        livro = Livros.query.get(livro_id)
+        if livro:
+            novo_exemplar = Exemplares(
+                livro_id=livro_id,
+                numero_chamada=numero_chamada,
+                estado=estado
+            )
+            db.session.add(novo_exemplar)
+            db.session.commit()
+
+    return redirect(url_for('home.index'))
 
 @home_bp.route('/editar')
 def editar():
@@ -362,15 +410,39 @@ def editar():
         return redirect(url_for('auth.login'))
     return render_template('editar.html')
 
-@home_bp.route('/excluir', methods=['GET', 'POST'], endpoint='excluir_livro')
+@home_bp.route('/excluir_exemplar', methods=['POST'])
+def excluir_exemplar():
+    token = request.cookies.get('token')
+    if not token or not verificar_token(token):
+        return jsonify({"status": "unauthorized"})
+
+    numero_chamada = request.form.get('numero_chamada', '').strip()
+    exemplar = Exemplares.query.filter_by(numero_chamada=numero_chamada).first()
+
+    if not exemplar:
+        return jsonify({"status": "not_found"})
+
+    if exemplar.estado != EstadoExemplar.DISPONIVEL:
+        return jsonify({"status": "not_allowed", "message": "Só é permitido excluir exemplares DISPONÍVEIS."})
+
+    
+    if exemplar.emprestimos:
+        return jsonify({"status": "in_use", "message": "Este exemplar já possui histórico de empréstimos e não pode ser excluído."})
+
+    try:
+        db.session.delete(exemplar)
+        db.session.commit()
+        return jsonify({"status": "success"})
+    except Exception as e:
+        print("Erro ao excluir exemplar:", e)
+        return jsonify({"status": "error", "message": str(e)})
+
+
+
+
+@home_bp.route('/excluir', methods=['GET'])
 def excluir():
     token = request.cookies.get('token')
     if not token or not verificar_token(token):
         return redirect(url_for('auth.login'))
-
-    if request.method == 'POST':
-        titulo = request.form.get('titulo')
-        # buscar e excluir livro aqui
-
-    return render_template('excluir.html')
-
+    return render_template('excluir.html')  

@@ -1,37 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Editar Livro</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/editar.css') }}" />
-  </head>
-  <body>
-    <header>
-      <h1>Editar Livro</h1>
-    </header>
 
-    <main>
-      <p>Digite o título, autor ou categoria do livro que deseja editar:</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar Exemplar</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/editar.css') }}" />
+</head>
 
-      <form id="form-editar">
-        <label for="titulo">Título, Autor ou Categoria</label>
-        <input
-          type="text"
-          id="busca"
-          placeholder="Estruturas de Dados Usando C, Tenenbaum, Programação"
-          required
-        />
-        <button type="submit">Buscar</button>
-      </form>
+<body>
+  <header>
+    <h1>Editar Exemplar</h1>
+  </header>
 
-      <a href="{{ url_for('home.index') }}">Voltar para a página inicial</a>
-    </main>
+  <main>
+    <p>Digite o número de chamada do exemplar que deseja editar:</p>
 
-    <footer>
-      <p>Projeto Integrador IESB 2025.</p>
-    </footer>
+    <form id="form-editar">
+      <label for="busca">Número de Chamada</label>
+      <input type="text" id="busca" placeholder="Ex: ABC123, DISPONIVEL, Algoritmos" required />
+      <button type="submit">Buscar</button>
+    </form>
 
-    <script src="{{ url_for('static', filename='js/editar.js') }}"></script>
-  </body>
+    <a href="{{ url_for('home.index') }}">Voltar para a página inicial</a>
+  </main>
+
+  <footer>
+    <p>Projeto Integrador IESB 2025.</p>
+  </footer>
+
+  <script>
+    document.getElementById('form-editar').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const termo = document.getElementById('busca').value.trim();
+      if (!termo) return alert('Digite algo para buscar');
+
+      try {
+        const response = await fetch('/consultar/buscar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texto: termo, tipo: 'exemplares' })
+        });
+
+        const resultados = await response.json();
+
+        if (!resultados.length) {
+          alert('Nenhum exemplar encontrado com esse termo.');
+          return;
+        }
+        const exemplar = resultados[0];
+
+        const params = new URLSearchParams({
+          id: exemplar.id,
+          numero_chamada: exemplar.numero_chamada,
+          livro_id: exemplar.livro.id,
+          livro_titulo: exemplar.livro.titulo,
+          estado: exemplar.estado
+        });
+
+        window.location.href = '/cadastrar?' + params.toString();
+
+      } catch (error) {
+        console.error(error);
+        alert('Erro ao buscar exemplares.');
+      }
+    });
+  </script>
+</body>
+
 </html>

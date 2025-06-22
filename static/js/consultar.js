@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputBusca = document.querySelector('.search-bar input');
   const lupa = document.querySelector('.search-bar .material-icons');
 
-  // Função principal de busca
   async function executarBusca() {
     const texto = document.querySelector('.search-bar input').value.trim();
 
@@ -42,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
   function atualizarDicaBusca() {
     const dica = document.getElementById('dica-busca');
 
@@ -69,8 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dica.innerText = 'Selecione uma tabela para ver as opções de filtro.';
     }
   }
-
-
 
   function exibirResultados(resultados) {
     const container = document.querySelector('.cards');
@@ -142,12 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Carrega todos os exemplares ao iniciar
   document.addEventListener('DOMContentLoaded', () => {
-    executarBusca(); // Chama sem texto para trazer tudo
+    executarBusca();
   });
 
-  // Exibe resultados ou mensagem de aviso
   function exibirResultados(dados) {
     const cardsContainer = document.querySelector('.cards');
     cardsContainer.innerHTML = '';
@@ -157,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Chama a função específica para exibir os resultados
     switch (tabelaSelecionada) {
       case 'exemplares': exibirExemplares(dados); break;
       case 'livros': exibirLivros(dados); break;
@@ -168,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Mostra mensagem no lugar dos cards
   function mostrarAviso(mensagem) {
     const cardsContainer = document.querySelector('.cards');
     cardsContainer.innerHTML = `
@@ -178,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // Funções de exibição para cada tipo de tabela
   function exibirExemplares(dados) {
     const cardsContainer = document.querySelector('.cards');
     cardsContainer.innerHTML = '';
@@ -246,15 +237,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const card = document.createElement('div');
       card.classList.add('card');
       card.innerHTML = `
-        <h3>${e.livro?.titulo || 'Empréstimo sem título'}</h3>
-        <p><strong>Usuário:</strong> ${e.usuario?.nome || 'N/A'} (${e.usuario?.matricula || 'N/A'})</p>
-        <p><strong>Data Empréstimo:</strong> ${e.data_emprestimo || 'N/A'}</p>
-        <p><strong>Data Devolução:</strong> ${e.data_devolucao || 'Pendente'}</p>
-      `;
+      <h3>${e.livro?.titulo || 'Empréstimo sem título'}</h3>
+      <p><strong>Número de Chamada:</strong> ${e.livro?.numero_chamada || 'N/A'}</p>
+      <p><strong>Usuário:</strong> ${e.usuario?.nome || 'N/A'} (${e.usuario?.matricula || 'N/A'})</p>
+      <p><strong>Data Empréstimo:</strong> ${e.data_emprestimo || 'N/A'}</p>
+      <p><strong>Data Devolução:</strong> ${e.data_devolucao || 'Pendente'}</p>
+    `;
 
       container.appendChild(card);
     });
   }
+
 
   function exibirAutores(dados) {
     const container = document.querySelector('.cards');
@@ -288,7 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Funções de carregamento inicial (mantidas como estavam)
   async function carregarExemplares() {
     try {
       const response = await fetch('/consultar/exemplares');
@@ -355,13 +347,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Event Listeners
   lupa.addEventListener('click', executarBusca);
   inputBusca.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') executarBusca();
   });
 
-  // Menu lateral - Filtros
+  // Menu lateral
   document.querySelectorAll('.menu-link').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -369,11 +360,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
       link.classList.add('active');
 
-      tabelaSelecionada = link.getAttribute('data-tabela');   // ✅ AGORA modifica a variável global
+      tabelaSelecionada = link.getAttribute('data-tabela');
       inputBusca.value = '';
 
 
-      // Mensagens de filtros disponíveis
+      // Mensagens de filtros 
       const mensagensFiltro = {
         exemplares: "A consulta de Exemplares pode ser feita por: título, autor, estado, numero de chamada ou ano",
         livros: "A consulta de Livros pode ser feita por: título, autor, categoria...",
@@ -383,11 +374,9 @@ document.addEventListener('DOMContentLoaded', () => {
         reservas: "A consulta de Reservas pode ser feita por: usuário, livro, datas..."
       };
 
-      // Atualiza só a div de dica-busca com a mensagem correta
       const dicaBuscaDiv = document.getElementById('dica-busca');
       dicaBuscaDiv.textContent = mensagensFiltro[tabelaSelecionada] || 'Selecione uma tabela válida.';
 
-      // Aqui você pode chamar o carregamento dos dados daquela tabela
       switch (tabelaSelecionada) {
         case 'exemplares': carregarExemplares(); break;
         case 'livros': carregarLivros(); break;
@@ -400,7 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-
-  // Mostra mensagem inicial
+  // Mensagem inicial
   mostrarAviso('Selecione um filtro no menu lateral para começar');
 });

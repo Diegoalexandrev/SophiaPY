@@ -1,39 +1,159 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Excluir Livro</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/excluir.css') }}" />
-  </head>
-  <body>
-    <header>
-      <h1>Excluir Livro</h1>
-    </header>
 
-    <main>
-      <p>Digite o título do livro que deseja excluir:</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Excluir Exemplar - Sistema Bibliotecário</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
 
-      <form id="form-excluir" method="POST" action="{{ url_for('home.excluir_livro') }}">
-        <label for="titulo">Título do Livro</label>
-        <input
-          type="text"
-          id="titulo"
-          name="titulo"
-          placeholder="Ex: Estruturas de Dados Usando C"
-          required
-        />
+    header {
+      background-color: #cc0000;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+    }
 
-        <button type="submit">Excluir</button>
-      </form>
+    main {
+      flex: 1;
+      padding: 20px;
+    }
 
-      <a href="{{ url_for('home.index') }}">Voltar para a página inicial</a>
-    </main>
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
 
-    <footer>
-      <p>Projeto Integrador IESB 2025.</p>
-    </footer>
+    label {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
+      display: block;
+    }
 
-    <script src="{{ url_for('static', filename='js/excluir.js') }}"></script>
-  </body>
+    input {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 35%;
+      margin: 20px auto 0;
+      padding: 10px;
+      background-color: #cc0000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      text-align: center;
+    }
+
+    button:hover {
+      background-color: #a30000;
+    }
+
+    footer {
+      background: #f1f1f1;
+      color: #555;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      border-top: 1px solid #ddd;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Excluir Exemplar</h1>
+  </header>
+  <main>
+    <form id="form-excluir-exemplar">
+      <h2>Excluir Exemplar</h2>
+      <label for="numero_chamada">Número de Chamada:</label>
+      <input type="text" id="numero_chamada" name="numero_chamada" placeholder="Ex: 12345" required />
+      <button type="submit">Excluir Exemplar</button>
+    </form>
+  </main>
+  <footer>
+    <p>Projeto Integrador IESB 2025</p>
+  </footer>
+
+  <script>
+    document
+      .getElementById('form-excluir-exemplar')
+      .addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const numero_chamada = document.getElementById('numero_chamada').value.trim();
+        if (!numero_chamada) {
+          alert('Informe o número de chamada do exemplar.');
+          return;
+        }
+
+        if (!confirm(`Tem certeza que deseja excluir o exemplar "${numero_chamada}"?`)) {
+          return;
+        }
+
+        fetch("{{ url_for('home.excluir_exemplar') }}", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ numero_chamada: numero_chamada })
+        })
+          .then(response => response.json())
+          .then(data => {
+            switch (data.status) {
+              case 'success':
+                alert('Exemplar excluído com sucesso!');
+                window.location.reload();
+                break;
+              case 'not_found':
+                alert('Exemplar não encontrado no sistema.');
+                break;
+              case 'unauthorized':
+                alert('Sessão expirada. Faça login novamente.');
+                window.location.href = "{{ url_for('auth.login') }}";
+                break;
+              case 'in_use':
+                alert('Não é possível excluir o exemplar: já existe histórico de empréstimos.');
+                break;
+              case 'not_allowed':
+                alert('Só é permitido excluir exemplares que estão DISPONÍVEIS.');
+                break;
+              default:
+                alert('Erro ao tentar excluir: ' + (data.message || 'Erro desconhecido'));
+            }
+          })
+          .catch(error => {
+            console.error('Erro na requisição:', error);
+            alert('Erro inesperado ao tentar excluir o exemplar.');
+          });
+      });
+  </script>
+
+</body>
+
 </html>

@@ -61,7 +61,9 @@ class Livros(db.Model):
     curso = db.Column(db.String(100), nullable=False)  
 
     autores = db.relationship("Autores", secondary="livros_autores", back_populates="livros")
-    exemplares = db.relationship('Exemplares', back_populates='livro')
+    #exemplares = db.relationship('Exemplares', back_populates='livro')
+    exemplares = db.relationship('Exemplares', back_populates='livro', cascade='all, delete-orphan', passive_deletes=True)
+
 
 
 class Autores(db.Model):
@@ -103,9 +105,12 @@ class Exemplares(db.Model):
     numero_chamada = db.Column(db.String(50), nullable=False)
     estado = db.Column(db.Enum(EstadoExemplar), nullable=False, default=EstadoExemplar.DISPONIVEL)
 
+    #livro = db.relationship('Livros', back_populates='exemplares')
+    livro_id = db.Column(db.Integer, db.ForeignKey('livros.id', ondelete='CASCADE'), nullable=False)
     livro = db.relationship('Livros', back_populates='exemplares')
     reservas = db.relationship('Reservas', back_populates='exemplar')
     emprestimos = db.relationship('Emprestimos', back_populates='exemplar')  # adicione esta linha
+    
 
     def to_dict(self):
         return {

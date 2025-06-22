@@ -1,60 +1,309 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastrar Livro</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastrar.css') }}">
-  </head>
-  <body>
-    <header>
-      <h1>Cadastro de Livro</h1>
-    </header>
 
-    <main>
-      <p>Preencha os campos abaixo para cadastrar um novo livro:</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema de Cadastro Bibliotecário</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
 
-      <form method="POST" action="{{ url_for('home.cadastrar') }}">
-        <label for="titulo">Título do Livro</label>
-        <input
-          type="text"
-          id="titulo"
-          name="titulo"
-          placeholder="Estruturas de Dados Usando C"
-          required
-        />
+    header {
+      background-color: #cc0000;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+    }
 
-        <label for="autor">Autor</label>
-        <input
-          type="text"
-          id="autor"
-          name="autor"
-          placeholder="Aaron M. Tenenbaum"
-          required
-        />
+    main {
+      flex: 1;
+      padding: 20px;
+    }
 
-        <label for="ano">Ano de Publicação</label>
-        <input type="date" id="ano" name="ano" required />
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+    }
 
-        <label for="categoria">Categoria</label>
-        <input
-          type="text"
-          id="categoria"
-          name="categoria"
-          placeholder="Programação"
-          required
-        />
+    .tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      background-color: #cc0000;
+      color: white;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      margin-right: 5px;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
 
-        <button type="submit">Adicionar</button>
+    .tab:hover {
+      background-color: #a30000;
+    }
+
+    .tab.active {
+      background-color: white;
+      color: #cc0000;
+      border: 1px solid #ccc;
+      border-bottom: none;
+    }
+
+    .tab-content {
+      display: none;
+      background-color: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    label {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    input,
+    select,
+    textarea {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 35%;
+      margin: 20px auto 0 auto;
+      padding: 10px;
+      background-color: #cc0000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      text-align: center;
+    }
+
+    button:hover {
+      background-color: #a30000;
+    }
+
+    footer {
+      background-color: #f1f1f1;
+      color: #555;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      border-top: 1px solid #ddd;
+      font-weight: bold;
+    }
+
+    footer p {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Cadastrar</h1>
+  </header>
+
+  <main>
+    <div class="tabs">
+      <div class="tab active" data-tab="tab-livros">Livros</div>
+      <div class="tab" data-tab="tab-autores">Autores</div>
+      <div class="tab" data-tab="exemplares">Exemplares</div>
+
+    </div>
+
+    <!-- LIVROS -->
+    <div id="tab-livros" class="tab-content active">
+      <form method="POST" action="{{ url_for('home.cadastrar_livro') }}">
+        <h2>Cadastro de Livro</h2>
+
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required />
+
+        <label for="autores">Autor(es):</label>
+        <select id="autores" name="autores" multiple required>
+          <option value="" disabled>Selecione um ou mais autores</option>
+          {% for autor in autores %}
+          <option value="{{ autor.id }}">{{ autor.nome }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="ano_publicacao">Ano de Publicação:</label>
+        <input type="date" id="ano_publicacao" name="ano_publicacao" required />
+
+        <label for="categoria">Categoria:</label>
+        <input type="text" id="categoria" name="categoria" required />
+
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" />
+
+        <label for="curso">Curso:</label>
+        <input type="text" id="curso" name="curso" />
+
+        <button type="submit">Cadastrar Livro</button>
       </form>
+    </div>
 
-      <a href="{{ url_for('home.index') }}">Voltar para a página inicial</a>
-    </main>
+    <!-- AUTORES -->
+    <div id="tab-autores" class="tab-content">
+      <form method="POST" action="{{ url_for('home.cadastrar_autor') }}">
+        <h2>Cadastro de Autor</h2>
 
-    <footer>
-      <p>Projeto Integrador IESB 2025.</p>
-    </footer>
+        <label for="nome_autor">Nome do Autor:</label>
+        <input type="text" id="nome_autor" name="nome_autor" required />
 
-    <script src="{{ url_for('static', filename='js/cadastrar.js') }}"></script>
-  </body>
+        <button type="submit">Cadastrar Autor</button>
+      </form>
+    </div>
+
+    <!-- EXEMPLARES -->
+    <div id="exemplares" class="tab-content">
+      <form method="POST" action="{{ url_for('home.cadastrar_exemplar') }}">
+        <h2>Cadastro de Exemplar</h2>
+
+        <label for="livro_exemplar">Livro:</label>
+        <select id="livro_exemplar" name="livro_exemplar" required>
+          <option value="">Selecione um livro</option>
+          {% for livro in livros %}
+          <option value="{{ livro.id }}">{{ livro.titulo }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="numero_chamada">Número de Chamada:</label>
+        <input type="text" id="numero_chamada" name="numero_chamada" required />
+
+        <label for="estado">Estado:</label>
+        <select id="estado" name="estado" required>
+          <option value="DISPONIVEL">Disponível</option>
+          <option value="EMPRESTADO">Emprestado</option>
+          <option value="RESERVADO">Reservado</option>
+          <option value="MANUTENCAO">Em Manutenção</option>
+        </select>
+
+
+        <button type="submit">Cadastrar Exemplar</button>
+      </form>
+    </div>
+
+
+
+  </main>
+
+  <footer>
+    <p>Projeto Integrador IESB 2025</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+        tab.classList.add('active');
+        const tabId = tab.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    function addAlertOnSubmit(formSelector, message) {
+      const form = document.querySelector(formSelector);
+      if (form) {
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          alert(message);
+          form.submit();
+        });
+      }
+    }
+
+    addAlertOnSubmit('#tab-livros form', 'Livro cadastrado com sucesso!');
+    addAlertOnSubmit('#tab-autores form', 'Autor cadastrado com sucesso!');
+    addAlertOnSubmit('#exemplares form', 'Exemplar cadastrado com sucesso!');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+
+      if (params.has('id')) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+        const tabExemplares = document.querySelector('.tab[data-tab="exemplares"]');
+        tabExemplares.classList.add('active');
+        document.getElementById('exemplares').classList.add('active');
+
+        document.getElementById('numero_chamada').value = params.get('numero_chamada') || '';
+
+        const livroExemplarSelect = document.getElementById('livro_exemplar');
+        const livroId = params.get('livro_id');
+        if (livroId) {
+          for (const option of livroExemplarSelect.options) {
+            option.selected = option.value === livroId;
+          }
+        }
+
+        const estadoSelect = document.getElementById('estado');
+        const estadoParam = params.get('estado');
+        if (estadoParam) {
+          for (const option of estadoSelect.options) {
+            option.selected = option.value === estadoParam;
+          }
+        }
+
+        const formExemplar = document.querySelector('#exemplares form');
+        const botaoSubmit = formExemplar.querySelector('button[type="submit"]');
+        botaoSubmit.textContent = 'Atualizar Exemplar';
+
+        if (!formExemplar.querySelector('input[name="id"]')) {
+          const inputId = document.createElement('input');
+          inputId.type = 'hidden';
+          inputId.name = 'id';
+          inputId.value = params.get('id');
+          formExemplar.appendChild(inputId);
+        }
+      }
+    });
+  </script>
+</body>
+
 </html>

@@ -1,49 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>SophiaPY</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
-  </head>
-  <body>
-    <header>
-      <h1>SophiaPY</h1>
-    </header>
 
-    <div class="menu">
-      <div class="menu-item">
-        <a href="/cadastrar">
-          <img src="{{ url_for('static', filename='images/icone-cadastrar.png') }}" alt="Cadastrar" />
-        </a>
-        <p>Cadastrar</p>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>SophiaPY</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
 
-      <div class="menu-item">
-        <a href="/editar">
-          <img src="{{ url_for('static', filename='images/icone-editar.png') }}" alt="Cadastrar" />
-        </a>
-        <p>Editar</p>
-      </div>
+<body>
+  <header
+    style="display: flex; justify-content: space-between; align-items: center; background-color: #cc0000; color: white; padding: 10px 20px;">
+    <div style="width: 80px;"></div>
+    <h1 style="margin: 0; text-align: center; flex-grow: 1;">SophiaPY</h1>
+    <a href="{{ url_for('auth.logout') }}"
+      style="color: white; text-decoration: none; display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600;">
+      <span class="material-icons" style="font-size: 18px;">logout</span>
+      <span style="font-size: 12px;">Sair</span>
+    </a>
+  </header>
 
-      <div class="menu-item">
-        <a href="/excluir">
-          <img src="{{ url_for('static', filename='images/icone-excluir.png') }}" alt="Cadastrar" />
-        </a>
-        <p>Excluir</p>
-      </div>
-
-      <div class="menu-item">
-        <a href="/consultar">
-          <img src="{{ url_for('static', filename='images/icone-consultar.png') }}" alt="Cadastrar" />
-        </a>
-        <p>Consultar</p>
-      </div>
+  <div class="menu">
+    <div class="menu-item">
+      <a href="/cadastrar">
+        <img src="{{ url_for('static', filename='images/icone-cadastrar.png') }}" alt="Cadastrar" />
+      </a>
+      <p>Cadastrar</p>
     </div>
 
-    <footer>
-      <p>Projeto Integrador IESB 2025.</p>
-    </footer>
+    <div class="menu-item">
+      <a href="/editar">
+        <img src="{{ url_for('static', filename='images/icone-editar.png') }}" alt="Cadastrar" />
+      </a>
+      <p>Editar</p>
+    </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-  </body>
+    <div class="menu-item">
+      <a href="/excluir">
+        <img src="{{ url_for('static', filename='images/icone-excluir.png') }}" alt="Cadastrar" />
+      </a>
+      <p>Excluir</p>
+    </div>
+
+    <div class="menu-item">
+      <a href="/consultar">
+        <img src="{{ url_for('static', filename='images/icone-consultar.png') }}" alt="Cadastrar" />
+      </a>
+      <p>Consultar</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>Projeto Integrador IESB 2025.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
 </html>

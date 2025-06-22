@@ -1,18 +1,15 @@
-/* Reset básico */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Corpo */
 body {
   font-family: Arial, sans-serif;
   height: 100%;
   background-color: #f8f8f8;
 }
 
-/* Cabeçalho */
 header {
   background-color: #cc0000;
   color: white;
@@ -61,36 +58,13 @@ header {
   color: #888;
   margin-left: 8px;
   cursor: pointer;
-  /* Faz a "mãozinha" aparecer */
 }
 
-/* .user-profile {
-  display: flex;
-  align-items: center;
-  font-size: 28px;
-  cursor: pointer;
-  color: white;
-}
-
-.user-profile .material-icons {
-  font-size: 32px;
-} */
-
-.user-profile a {
-  font-size: 15px;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-/* Conteúdo principal */
 main {
   display: flex;
   height: calc(100vh - 70px);
 }
 
-/* Navegação lateral */
 .side-nav {
   width: 220px;
   background-color: #fff;
@@ -149,13 +123,10 @@ main {
 
 .menu-link.active {
   background-color: #cc0000;
-  /* Cor ativa igual ao header */
   color: white;
   filter: blur(0.5px);
 }
 
-
-/* Área de conteúdo */
 .content {
   flex: 1;
   padding: 20px;
@@ -174,26 +145,9 @@ main {
   border: 1px solid #ccc;
 }
 
-/* Cards */
-/* .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-.cards .card {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-} */
-
 .cards {
   display: grid;
-  /*grid-template-columns: repeat(3, 1fr);*/
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  /* Cada card terá pelo menos 400px */
-  /* 5 colunas */
   gap: 20px;
 }
 

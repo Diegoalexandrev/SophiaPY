@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify(dados)
       });
-      
+
       const result = await response.json();
-      console.log(result);        
-      
+      console.log(result);
+
       if (!response.ok) {
         mensagemErro.textContent = result.erro || 'Erro no login';
         mensagemErro.style.display = 'block';
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       mensagemErro.style.display = 'none';
-      alert('Login realizado com sucesso!');
+      //alert('Login realizado com sucesso!');
 
       // Salva o token no cookie
       document.cookie = `token=${result.token}; path=/; max-age=86400`;
