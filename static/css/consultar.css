@@ -167,3 +167,32 @@ main {
   font-size: 14px;
   font-style: italic;
 }
+
+.pilha-card {
+  background-color: #fff8e1;
+  border-left: 6px solid #cc0000;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pilha-card h4 {
+  margin-bottom: 8px;
+  color: #cc0000;
+}
+
+.pilha-card p {
+  margin: 0;
+  font-weight: bold;
+  color: #444;
+}
+
+.pilha-vazia {
+  background-color: #ffe0e0;
+  border-left: 6px solid #cc0000;
+  padding: 15px;
+  border-radius: 8px;
+  color: #cc0000;
+  text-align: center;
+  font-style: italic;
+}

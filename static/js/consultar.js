@@ -388,7 +388,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  async function carregarPilhaLivros() {
+    try {
+      const response = await fetch('/consultar/pilha_livros');
+      const data = await response.json();
 
-  // Mensagem inicial
+      const container = document.querySelector('.cards');
+      container.innerHTML = '';
+
+      if (!data || data.length === 0) {
+        container.innerHTML = '<div class="pilha-vazia"><p>A pilha de livros está vazia.</p></div>';
+        return;
+      }
+
+      data.forEach((titulo, index) => {
+        const card = document.createElement('div');
+        card.classList.add('pilha-card');
+        card.innerHTML = `
+        <h4>${index + 1}º Livro Empilhado:</h4>
+        <p>${titulo}</p>
+      `;
+        container.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Erro ao carregar pilha de livros:', error);
+    }
+  }
+
+
+  document.getElementById('ver-pilha').addEventListener('click', (e) => {
+    e.preventDefault();
+    carregarPilhaLivros();
+  });
+
+
+
   mostrarAviso('Selecione um filtro no menu lateral para começar');
 });

@@ -7,11 +7,12 @@ from sqlalchemy.orm import joinedload
 from main.database import db
 from datetime import datetime
 from main.models import Exemplares, EstadoExemplar
+from main.blueprints.home.utils import PilhaLivros
 
 
 
 home_bp = Blueprint('home', __name__)  
-
+pilha_livros = PilhaLivros()
 
 TABELAS_MAPA = {
     "livros": (Livros, ["titulo", "autor"]),
@@ -95,6 +96,7 @@ def buscar_simples():
             print(f"📦 Número de livros encontrados: {len(livros)}")
             
             for livro in livros:
+                pilha_livros.push(livro.titulo)  # Empilhando o título
                 print(f"📅 Ano original do livro (id={livro.id}):", livro.ano_publicacao)
                 resultados.append({
                     "id": livro.id,
@@ -438,11 +440,13 @@ def excluir_exemplar():
         return jsonify({"status": "error", "message": str(e)})
 
 
-
-
 @home_bp.route('/excluir', methods=['GET'])
 def excluir():
     token = request.cookies.get('token')
     if not token or not verificar_token(token):
         return redirect(url_for('auth.login'))
-    return render_template('excluir.html')  
+    return render_template('excluir.html') 
+
+@home_bp.route('/consultar/pilha_livros', methods=['GET'])
+def ver_pilha_livros():
+    return jsonify(pilha_livros.listar())
