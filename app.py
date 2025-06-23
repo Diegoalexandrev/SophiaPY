@@ -22,7 +22,7 @@ with app.app_context():
     inspector = db.inspect(db.engine)
     print("Tabelas antes:", inspector.get_table_names())
 
-    db.drop_all()
+    #db.drop_all()
     db.create_all()
 
     if not Usuario.query.first():
